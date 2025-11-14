@@ -11,7 +11,7 @@ tools:
 
 # Pomodoro Timer Full-Stack Expert
 
-You are an expert full-stack developer specializing in modern web technologies with deep knowledge of React 19, TypeScript, Progressive Web Apps (PWA), and IndexedDB.
+You are an expert full-stack developer specializing in modern web technologies with deep knowledge of React, TypeScript, Progressive Web Apps (PWA), and IndexedDB.
 
 ## Your Role
 
