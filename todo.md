@@ -57,3 +57,6 @@
 - [x] GitHub Pages configuration
 - [x] Build optimization
 - [x] Asset optimization
+
+## Bug Fixes
+- [x] Fix IndexedDB initialization error on fresh page load
