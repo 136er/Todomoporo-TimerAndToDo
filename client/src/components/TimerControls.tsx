@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 interface TimerControlsProps {
   isRunning: boolean;
@@ -11,7 +11,12 @@ interface TimerControlsProps {
 /**
  * Timer control buttons (Start, Stop, Reset)
  */
-export function TimerControls({ isRunning, onStart, onStop, onReset }: TimerControlsProps) {
+export function TimerControls({
+  isRunning,
+  onStart,
+  onStop,
+  onReset,
+}: TimerControlsProps) {
   return (
     <div className="flex gap-3 justify-center items-center">
       {!isRunning ? (
@@ -34,7 +39,7 @@ export function TimerControls({ isRunning, onStart, onStop, onReset }: TimerCont
           Stop
         </Button>
       )}
-      
+
       <Button
         onClick={onReset}
         size="lg"

@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { saveTimerState, loadTimerState } from '@/lib/db';
-import { playAlarmSound } from '@/lib/audio';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { saveTimerState, loadTimerState } from "@/lib/db";
+import { playAlarmSound } from "@/lib/audio";
 
 const POMODORO_DURATION = 25 * 60; // 25 minutes in seconds
 const SHORT_BREAK_DURATION = 5 * 60; // 5 minutes in seconds
 const LONG_BREAK_DURATION = 15 * 60; // 15 minutes in seconds
 const POMODOROS_BEFORE_LONG_BREAK = 4;
 
-export type TimerMode = 'work' | 'shortBreak' | 'longBreak';
+export type TimerMode = "work" | "shortBreak" | "longBreak";
 
 export interface UseTimerReturn {
   timeLeft: number;
@@ -36,7 +36,7 @@ export interface UseTimerReturn {
 export function useTimer(): UseTimerReturn {
   const [timeLeft, setTimeLeft] = useState(POMODORO_DURATION);
   const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState<TimerMode>('work');
+  const [mode, setMode] = useState<TimerMode>("work");
   const [completedPomodoros, setCompletedPomodoros] = useState(0);
   const [sessionGoal, setSessionGoal] = useState(4);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -47,11 +47,11 @@ export function useTimer(): UseTimerReturn {
   // Get duration for current mode
   const getCurrentDuration = useCallback(() => {
     switch (mode) {
-      case 'work':
+      case "work":
         return POMODORO_DURATION;
-      case 'shortBreak':
+      case "shortBreak":
         return SHORT_BREAK_DURATION;
-      case 'longBreak':
+      case "longBreak":
         return LONG_BREAK_DURATION;
     }
   }, [mode]);
@@ -60,27 +60,27 @@ export function useTimer(): UseTimerReturn {
   const progress = 1 - timeLeft / getCurrentDuration();
 
   // Format time as MM:SS
-  const displayTime = `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`;
+  const displayTime = `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, "0")}`;
 
   /**
    * Switch to next mode in the cycle
    */
   const switchToNextMode = useCallback(() => {
-    if (mode === 'work') {
+    if (mode === "work") {
       const nextCompletedCount = completedPomodoros + 1;
       setCompletedPomodoros(nextCompletedCount);
-      
+
       // Check if we need a long break
       if (nextCompletedCount % POMODOROS_BEFORE_LONG_BREAK === 0) {
-        setMode('longBreak');
+        setMode("longBreak");
         setTimeLeft(LONG_BREAK_DURATION);
       } else {
-        setMode('shortBreak');
+        setMode("shortBreak");
         setTimeLeft(SHORT_BREAK_DURATION);
       }
     } else {
       // After any break, go back to work
-      setMode('work');
+      setMode("work");
       setTimeLeft(POMODORO_DURATION);
     }
   }, [mode, completedPomodoros]);
@@ -95,26 +95,26 @@ export function useTimer(): UseTimerReturn {
     }
 
     // Show notification
-    if ('Notification' in window && Notification.permission === 'granted') {
+    if ("Notification" in window && Notification.permission === "granted") {
       const messages = {
         work: {
-          title: 'Pomodoro Complete! 🍅',
-          body: 'Great work! Time for a break.',
+          title: "Pomodoro Complete! 🍅",
+          body: "Great work! Time for a break.",
         },
         shortBreak: {
-          title: 'Break Over! ⏰',
-          body: 'Ready to focus again?',
+          title: "Break Over! ⏰",
+          body: "Ready to focus again?",
         },
         longBreak: {
-          title: 'Long Break Over! 🎉',
-          body: 'Refreshed and ready to go!',
+          title: "Long Break Over! 🎉",
+          body: "Refreshed and ready to go!",
         },
       };
 
       const message = messages[mode];
       new Notification(message.title, {
         body: message.body,
-        icon: '/icon-192.png',
+        icon: "/icon-192.png",
       });
     }
 
@@ -139,14 +139,14 @@ export function useTimer(): UseTimerReturn {
     setIsRunning(true);
 
     intervalRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
+      setTimeLeft(prev => {
         if (prev <= 1) {
           // Timer completed
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
           }
-          
+
           handleTimerComplete();
           return 0;
         }
@@ -194,15 +194,15 @@ export function useTimer(): UseTimerReturn {
    */
   useEffect(() => {
     const modeEmojis = {
-      work: '🍅',
-      shortBreak: '☕',
-      longBreak: '🎉',
+      work: "🍅",
+      shortBreak: "☕",
+      longBreak: "🎉",
     };
 
     if (isRunning) {
       document.title = `${modeEmojis[mode]} (${displayTime}) Pomodoro Timer`;
     } else {
-      document.title = 'Pomodoro Timer';
+      document.title = "Pomodoro Timer";
     }
   }, [displayTime, isRunning, mode]);
 
@@ -223,12 +223,21 @@ export function useTimer(): UseTimerReturn {
           autoCycleEnabled,
         });
       } catch (error) {
-        console.error('Failed to save timer state:', error);
+        console.error("Failed to save timer state:", error);
       }
     };
 
     save();
-  }, [timeLeft, isRunning, activeTaskId, mode, completedPomodoros, sessionGoal, soundEnabled, autoCycleEnabled]);
+  }, [
+    timeLeft,
+    isRunning,
+    activeTaskId,
+    mode,
+    completedPomodoros,
+    sessionGoal,
+    soundEnabled,
+    autoCycleEnabled,
+  ]);
 
   /**
    * Load timer state from IndexedDB on mount
@@ -240,17 +249,17 @@ export function useTimer(): UseTimerReturn {
         if (state) {
           setTimeLeft(state.timeLeft || POMODORO_DURATION);
           setActiveTaskIdState(state.activeTaskId || null);
-          setMode((state as any).mode || 'work');
+          setMode((state as any).mode || "work");
           setCompletedPomodoros((state as any).completedPomodoros || 0);
           setSessionGoal((state as any).sessionGoal || 4);
           setSoundEnabled((state as any).soundEnabled !== false);
           setAutoCycleEnabled((state as any).autoCycleEnabled !== false);
-          
+
           // Don't auto-resume timer on page load
           // User must manually start
         }
       } catch (error) {
-        console.error('Failed to load timer state:', error);
+        console.error("Failed to load timer state:", error);
       }
     };
 
@@ -261,7 +270,7 @@ export function useTimer(): UseTimerReturn {
    * Request notification permission on mount
    */
   useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
+    if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
   }, []);
@@ -294,9 +303,18 @@ export function useTimer(): UseTimerReturn {
       });
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [timeLeft, isRunning, activeTaskId, mode, completedPomodoros, sessionGoal, soundEnabled, autoCycleEnabled]);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [
+    timeLeft,
+    isRunning,
+    activeTaskId,
+    mode,
+    completedPomodoros,
+    sessionGoal,
+    soundEnabled,
+    autoCycleEnabled,
+  ]);
 
   return {
     timeLeft,

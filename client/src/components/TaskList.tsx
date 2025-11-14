@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { Plus, Trash2, CheckCircle2 } from 'lucide-react';
-import { Task, saveTasks, loadTasks, initDB } from '@/lib/db';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Plus, Trash2, CheckCircle2 } from "lucide-react";
+import { Task, saveTasks, loadTasks, initDB } from "@/lib/db";
+import { toast } from "sonner";
 
 interface TaskListProps {
   activeTaskId: number | null;
@@ -16,7 +16,7 @@ interface TaskListProps {
  */
 export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskText, setNewTaskText] = useState('');
+  const [newTaskText, setNewTaskText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   /**
@@ -29,8 +29,8 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
         const loadedTasks = await loadTasks();
         setTasks(loadedTasks);
       } catch (error) {
-        console.error('Failed to load tasks:', error);
-        toast.error('Failed to load tasks');
+        console.error("Failed to load tasks:", error);
+        toast.error("Failed to load tasks");
       } finally {
         setIsLoading(false);
       }
@@ -44,9 +44,9 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
    */
   useEffect(() => {
     if (!isLoading) {
-      saveTasks(tasks).catch((error) => {
-        console.error('Failed to save tasks:', error);
-        toast.error('Failed to save tasks');
+      saveTasks(tasks).catch(error => {
+        console.error("Failed to save tasks:", error);
+        toast.error("Failed to save tasks");
       });
     }
   }, [tasks, isLoading]);
@@ -66,17 +66,17 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
       createdAt: Date.now(),
     };
 
-    setTasks((prev) => [...prev, newTask]);
-    setNewTaskText('');
-    toast.success('Task added');
+    setTasks(prev => [...prev, newTask]);
+    setNewTaskText("");
+    toast.success("Task added");
   };
 
   /**
    * Toggle task completion
    */
   const handleToggleComplete = (taskId: number) => {
-    setTasks((prev) =>
-      prev.map((task) =>
+    setTasks(prev =>
+      prev.map(task =>
         task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
       )
     );
@@ -86,14 +86,14 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
    * Delete a task
    */
   const handleDeleteTask = (taskId: number) => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
-    
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+
     // If deleted task was active, clear active task
     if (activeTaskId === taskId) {
       onTaskSelect(null);
     }
-    
-    toast.success('Task deleted');
+
+    toast.success("Task deleted");
   };
 
   /**
@@ -103,16 +103,16 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
     if (activeTaskId === taskId) {
       // Deselect if already active
       onTaskSelect(null);
-      setTasks((prev) =>
-        prev.map((task) =>
+      setTasks(prev =>
+        prev.map(task =>
           task.id === taskId ? { ...task, isActive: false } : task
         )
       );
     } else {
       // Select new task
       onTaskSelect(taskId);
-      setTasks((prev) =>
-        prev.map((task) => ({
+      setTasks(prev =>
+        prev.map(task => ({
           ...task,
           isActive: task.id === taskId,
         }))
@@ -124,7 +124,7 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
    * Handle Enter key press
    */
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAddTask();
     }
   };
@@ -144,7 +144,7 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
           type="text"
           placeholder="Add a new task..."
           value={newTaskText}
-          onChange={(e) => setNewTaskText(e.target.value)}
+          onChange={e => setNewTaskText(e.target.value)}
           onKeyPress={handleKeyPress}
           className="flex-1"
         />
@@ -159,7 +159,7 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
         </p>
       ) : (
         <ul className="space-y-2">
-          {tasks.map((task) => (
+          {tasks.map(task => (
             <li
               key={task.id}
               className={`
@@ -167,8 +167,8 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
                 transition-all duration-200
                 ${
                   task.isActive
-                    ? 'bg-primary/10 border-primary shadow-sm'
-                    : 'bg-card hover:bg-accent'
+                    ? "bg-primary/10 border-primary shadow-sm"
+                    : "bg-card hover:bg-accent"
                 }
               `}
             >
@@ -177,9 +177,9 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
                 checked={task.isCompleted}
                 onChange={() => handleToggleComplete(task.id)}
                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer flex-shrink-0"
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               />
-              
+
               <div
                 className="flex items-center gap-2 flex-1 cursor-pointer"
                 onClick={() => handleTaskClick(task.id)}
@@ -189,18 +189,18 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
                 )}
                 <span
                   className={`
-                    ${task.isActive ? 'font-medium' : ''}
-                    ${task.isCompleted ? 'line-through text-muted-foreground' : ''}
+                    ${task.isActive ? "font-medium" : ""}
+                    ${task.isCompleted ? "line-through text-muted-foreground" : ""}
                   `}
                 >
                   {task.text}
                 </span>
               </div>
-              
+
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   handleDeleteTask(task.id);
                 }}

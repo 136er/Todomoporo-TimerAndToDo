@@ -7,6 +7,7 @@ Thank you for considering contributing to this project! We welcome contributions
 ### Reporting Bugs
 
 If you find a bug, please open an issue on GitHub with:
+
 - A clear, descriptive title
 - Steps to reproduce the issue
 - Expected behavior
@@ -17,6 +18,7 @@ If you find a bug, please open an issue on GitHub with:
 ### Suggesting Features
 
 We love new ideas! To suggest a feature:
+
 - Open an issue with the `enhancement` label
 - Describe the feature and its benefits
 - Explain how it would work
@@ -25,6 +27,7 @@ We love new ideas! To suggest a feature:
 ### Pull Requests
 
 1. **Fork the repository** and create your branch from `main`
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -47,6 +50,7 @@ We love new ideas! To suggest a feature:
      - `docs: update installation instructions`
 
 5. **Push to your fork** and submit a pull request
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -58,12 +62,14 @@ We love new ideas! To suggest a feature:
 ## Development Setup
 
 1. Clone your fork:
+
    ```bash
    git clone https://github.com/your-username/pomodoro-timer.git
    cd pomodoro-timer
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    ```
@@ -93,6 +99,7 @@ We love new ideas! To suggest a feature:
 ## Testing
 
 Before submitting a PR:
+
 - Test the timer functionality
 - Verify task management works
 - Check IndexedDB persistence
