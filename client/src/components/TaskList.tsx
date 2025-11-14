@@ -62,12 +62,24 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
       id: Date.now(),
       text,
       isActive: false,
+      isCompleted: false,
       createdAt: Date.now(),
     };
 
     setTasks((prev) => [...prev, newTask]);
     setNewTaskText('');
     toast.success('Task added');
+  };
+
+  /**
+   * Toggle task completion
+   */
+  const handleToggleComplete = (taskId: number) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
+      )
+    );
   };
 
   /**
@@ -151,21 +163,36 @@ export function TaskList({ activeTaskId, onTaskSelect }: TaskListProps) {
             <li
               key={task.id}
               className={`
-                flex items-center justify-between p-3 rounded-lg border cursor-pointer
-                transition-all duration-200 hover:shadow-md
+                flex items-center gap-3 p-3 rounded-lg border
+                transition-all duration-200
                 ${
                   task.isActive
                     ? 'bg-primary/10 border-primary shadow-sm'
                     : 'bg-card hover:bg-accent'
                 }
               `}
-              onClick={() => handleTaskClick(task.id)}
             >
-              <div className="flex items-center gap-3 flex-1">
+              <input
+                type="checkbox"
+                checked={task.isCompleted}
+                onChange={() => handleToggleComplete(task.id)}
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer flex-shrink-0"
+                onClick={(e) => e.stopPropagation()}
+              />
+              
+              <div
+                className="flex items-center gap-2 flex-1 cursor-pointer"
+                onClick={() => handleTaskClick(task.id)}
+              >
                 {task.isActive && (
                   <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
                 )}
-                <span className={task.isActive ? 'font-medium' : ''}>
+                <span
+                  className={`
+                    ${task.isActive ? 'font-medium' : ''}
+                    ${task.isCompleted ? 'line-through text-muted-foreground' : ''}
+                  `}
+                >
                   {task.text}
                 </span>
               </div>

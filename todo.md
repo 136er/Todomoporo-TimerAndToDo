@@ -60,3 +60,8 @@
 
 ## Bug Fixes
 - [x] Fix IndexedDB initialization error on fresh page load
+
+## New Features
+- [x] Add task completion checkboxes (mark tasks as done)
+- [x] Separate active task (for timer) from completed tasks
+- [x] Show completed tasks with strikethrough style
