@@ -3,13 +3,15 @@ import { useEffect, useRef } from 'react';
 interface TimerCanvasProps {
   progress: number;
   displayTime: string;
+  isRunning: boolean;
+  mode: 'work' | 'shortBreak' | 'longBreak';
   size?: number;
 }
 
 /**
  * Canvas-based circular timer with progress ring
  */
-export function TimerCanvas({ progress, displayTime, size = 300 }: TimerCanvasProps) {
+export function TimerCanvas({ progress, displayTime, isRunning, mode, size = 300 }: TimerCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -32,13 +34,19 @@ export function TimerCanvas({ progress, displayTime, size = 300 }: TimerCanvasPr
     ctx.lineWidth = 12;
     ctx.stroke();
 
-    // Progress ring (primary color)
+    // Progress ring (color based on mode)
     if (progress > 0) {
+      const modeColors = {
+        work: '#22c55e', // green
+        shortBreak: '#3b82f6', // blue
+        longBreak: '#a855f7', // purple
+      };
+      
       ctx.beginPath();
       const startAngle = -Math.PI / 2; // Start at top
       const endAngle = startAngle + Math.PI * 2 * progress;
       ctx.arc(center, center, radius, startAngle, endAngle);
-      ctx.strokeStyle = 'hsl(var(--primary))';
+      ctx.strokeStyle = modeColors[mode];
       ctx.lineWidth = 12;
       ctx.lineCap = 'round';
       ctx.stroke();
@@ -51,7 +59,7 @@ export function TimerCanvas({ progress, displayTime, size = 300 }: TimerCanvasPr
     ctx.textBaseline = 'middle';
     ctx.fillText(displayTime, center, center);
 
-  }, [progress, displayTime, size]);
+  }, [progress, displayTime, isRunning, mode, size]);
 
   return (
     <canvas

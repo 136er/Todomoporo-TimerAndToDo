@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { TimerCanvas } from '@/components/TimerCanvas';
 import { TimerControls } from '@/components/TimerControls';
 import { TaskList } from '@/components/TaskList';
+import SessionSettings from '@/components/SessionSettings';
 import { useTimer } from '@/hooks/useTimer';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -15,10 +16,19 @@ export default function Home() {
     isRunning,
     progress,
     displayTime,
+    mode,
+    completedPomodoros,
+    sessionGoal,
+    soundEnabled,
+    autoCycleEnabled,
     startTimer,
     stopTimer,
     resetTimer,
     setActiveTaskId,
+    setSessionGoal,
+    setSoundEnabled,
+    setAutoCycleEnabled,
+    skipToNext,
     activeTaskId,
   } = useTimer();
 
@@ -52,99 +62,105 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50">
-      <div className="container py-8 md:py-12">
-        {/* Header */}
-        <header className="text-center mb-8 md:mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-            🍅 Pomodoro Timer
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Stay focused and productive with the Pomodoro Technique
-          </p>
-        </header>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/20">
+      {/* Header */}
+      <header className="py-8 text-center border-b">
+        <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
+          <span className="text-5xl">🍅</span>
+          Pomodoro Timer
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          Stay focused and productive with the Pomodoro Technique
+        </p>
+      </header>
 
-        {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {/* Timer Section */}
-          <div className="space-y-6">
-            <Card className="p-8 shadow-xl bg-white/80 backdrop-blur">
-              <div className="space-y-6">
-                {/* Canvas Timer */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Timer Display */}
+            <Card className="p-8">
+              <div className="flex flex-col items-center space-y-6">
                 <TimerCanvas
                   progress={progress}
                   displayTime={displayTime}
-                  size={280}
+                  isRunning={isRunning}
+                  mode={mode}
                 />
-
-                {/* Timer Controls */}
                 <TimerControls
                   isRunning={isRunning}
                   onStart={startTimer}
                   onStop={stopTimer}
                   onReset={resetTimer}
                 />
-
-                {/* Timer Info */}
-                <div className="text-center text-sm text-muted-foreground">
-                  {isRunning ? (
-                    <p className="text-green-600 font-medium">⏱️ Timer is running...</p>
-                  ) : timeLeft === 0 ? (
-                    <p className="text-blue-600 font-medium">✅ Session complete!</p>
-                  ) : (
-                    <p>Click Start to begin a 25-minute focus session</p>
-                  )}
-                </div>
+                <p className="text-sm text-muted-foreground">
+                  {mode === 'work'
+                    ? 'Click Start to begin a 25-minute focus session'
+                    : mode === 'shortBreak'
+                    ? 'Take a 5-minute break'
+                    : 'Enjoy your 15-minute long break'}
+                </p>
               </div>
             </Card>
 
-            {/* Info Card */}
-            <Card className="p-6 bg-gradient-to-br from-red-500 to-orange-500 text-white shadow-lg">
-              <h3 className="font-semibold text-lg mb-2">How it works</h3>
-              <ul className="space-y-2 text-sm">
-                <li>✓ Work for 25 minutes without interruption</li>
-                <li>✓ Take a 5-minute break</li>
-                <li>✓ After 4 sessions, take a longer 15-30 minute break</li>
-                <li>✓ Track your tasks and stay organized</li>
+            {/* How it Works */}
+            <Card className="p-6 bg-gradient-to-br from-red-500 to-orange-500 text-white">
+              <h2 className="text-xl font-bold mb-4">How it works</h2>
+              <ul className="space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-lg">✓</span>
+                  <span>Work for 25 minutes without interruption</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-lg">✓</span>
+                  <span>Take a 5-minute break</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-lg">✓</span>
+                  <span>After 4 sessions, take a longer 15-30 minute break</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-lg">✓</span>
+                  <span>Track your tasks and stay organized</span>
+                </li>
               </ul>
             </Card>
           </div>
 
-          {/* Tasks Section */}
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Your Tasks
-              </h2>
-              <p className="text-gray-600 text-sm">
-                Add tasks and click one to link it with the timer
-              </p>
-            </div>
-            
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Session Settings */}
+            <SessionSettings
+              sessionGoal={sessionGoal}
+              completedPomodoros={completedPomodoros}
+              soundEnabled={soundEnabled}
+              autoCycleEnabled={autoCycleEnabled}
+              mode={mode}
+              onSessionGoalChange={setSessionGoal}
+              onSoundToggle={setSoundEnabled}
+              onAutoCycleToggle={setAutoCycleEnabled}
+              onSkipToNext={skipToNext}
+            />
+
+            {/* Task List */}
             <TaskList
               activeTaskId={activeTaskId}
-              onTaskSelect={(taskId) => {
-                setActiveTaskId(taskId);
-                if (taskId) {
-                  resetTimer();
-                  startTimer();
-                  toast.success('Task selected! Timer started.');
-                } else {
-                  resetTimer();
-                  toast.info('Task deselected. Timer reset.');
+              onTaskSelect={(id) => {
+                setActiveTaskId(id);
+                if (id !== null) {
+                  toast.success('Task linked to timer');
                 }
               }}
             />
           </div>
         </div>
+      </main>
 
-        {/* Footer */}
-        <footer className="text-center mt-12 text-sm text-gray-500">
-          <p>
-            Built with ❤️ using React, TypeScript, and IndexedDB
-          </p>
-        </footer>
-      </div>
+      {/* Footer */}
+      <footer className="py-6 text-center text-sm text-muted-foreground border-t mt-12">
+        Built with ❤️ using React, TypeScript, and IndexedDB
+      </footer>
     </div>
   );
 }

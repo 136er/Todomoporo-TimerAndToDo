@@ -65,3 +65,14 @@
 - [x] Add task completion checkboxes (mark tasks as done)
 - [x] Separate active task (for timer) from completed tasks
 - [x] Show completed tasks with strikethrough style
+
+## Advanced Features
+- [x] Automatic Pomodoro cycle (25 min work → 5 min break → repeat)
+- [x] Alarm sound when timer completes
+- [x] Long break after 4 Pomodoros (15 minutes)
+- [x] Session goal setting (plan number of Pomodoros to complete)
+- [x] Progress tracker showing completed/remaining Pomodoros
+- [x] Sound on/off toggle
+- [x] Auto-start next session toggle
+- [x] Skip to next session button
+- [ ] Volume control slider

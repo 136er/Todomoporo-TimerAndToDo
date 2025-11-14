@@ -21,6 +21,11 @@ export interface TimerState {
   timeLeft: number;
   isRunning: boolean;
   activeTaskId: number | null;
+  mode?: 'work' | 'shortBreak' | 'longBreak';
+  completedPomodoros?: number;
+  sessionGoal?: number;
+  soundEnabled?: boolean;
+  autoCycleEnabled?: boolean;
 }
 
 let db: IDBDatabase | null = null;
