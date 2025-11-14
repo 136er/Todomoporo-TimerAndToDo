@@ -23,12 +23,19 @@ export interface TimerState {
 }
 
 let db: IDBDatabase | null = null;
+let dbInitPromise: Promise<void> | null = null;
 
 /**
  * Initialize IndexedDB database
  */
 export async function initDB(): Promise<void> {
-  return new Promise((resolve, reject) => {
+  // Return existing promise if initialization is in progress
+  if (dbInitPromise) return dbInitPromise;
+  
+  // Return immediately if already initialized
+  if (db) return Promise.resolve();
+  
+  dbInitPromise = new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => reject(request.error);
@@ -51,12 +58,15 @@ export async function initDB(): Promise<void> {
       }
     };
   });
+  
+  return dbInitPromise;
 }
 
 /**
  * Save all tasks to IndexedDB
  */
 export async function saveTasks(tasks: Task[]): Promise<void> {
+  await initDB();
   if (!db) throw new Error('Database not initialized');
 
   const tx = db.transaction(TASK_STORE, 'readwrite');
@@ -80,6 +90,7 @@ export async function saveTasks(tasks: Task[]): Promise<void> {
  * Load all tasks from IndexedDB
  */
 export async function loadTasks(): Promise<Task[]> {
+  await initDB();
   if (!db) throw new Error('Database not initialized');
 
   const tx = db.transaction(TASK_STORE, 'readonly');
@@ -96,6 +107,7 @@ export async function loadTasks(): Promise<Task[]> {
  * Save timer state to IndexedDB
  */
 export async function saveTimerState(state: Omit<TimerState, 'key'>): Promise<void> {
+  await initDB();
   if (!db) throw new Error('Database not initialized');
 
   const tx = db.transaction(TIMER_STORE, 'readwrite');
@@ -113,6 +125,7 @@ export async function saveTimerState(state: Omit<TimerState, 'key'>): Promise<vo
  * Load timer state from IndexedDB
  */
 export async function loadTimerState(): Promise<TimerState | null> {
+  await initDB();
   if (!db) throw new Error('Database not initialized');
 
   const tx = db.transaction(TIMER_STORE, 'readonly');
@@ -129,6 +142,7 @@ export async function loadTimerState(): Promise<TimerState | null> {
  * Delete a task by ID
  */
 export async function deleteTask(id: number): Promise<void> {
+  await initDB();
   if (!db) throw new Error('Database not initialized');
 
   const tx = db.transaction(TASK_STORE, 'readwrite');
