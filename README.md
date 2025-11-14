@@ -162,6 +162,21 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+### 🤖 GitHub Copilot Custom Agent
+
+This repository includes a custom GitHub Copilot agent (`@pomodoro-fullstack-expert`) that specializes in:
+- React 19, TypeScript, and PWA development
+- Code review and quality assurance
+- Bug hunting and performance optimization
+- IndexedDB and Service Worker best practices
+
+To use the agent in GitHub Copilot Chat:
+```
+@pomodoro-fullstack-expert [your question or request]
+```
+
+See [.github/agents/README.md](.github/agents/README.md) for more details.
+
 ## 🐛 Known Issues
 
 - Dark mode is not yet implemented
