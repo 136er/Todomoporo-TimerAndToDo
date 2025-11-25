@@ -7,6 +7,7 @@ A modern, feature-rich Progressive Web App (PWA) for the Pomodoro Technique with
 ## ✨ Features
 
 ### Core Functionality
+
 - **25-Minute Pomodoro Timer** - Classic Pomodoro technique implementation
 - **Canvas-Based Visualization** - Beautiful circular progress indicator
 - **Timer Controls** - Start, Stop, and Reset with visual feedback
@@ -14,6 +15,7 @@ A modern, feature-rich Progressive Web App (PWA) for the Pomodoro Technique with
 - **Browser Title Updates** - See remaining time even when tab is inactive
 
 ### Task Management
+
 - **Add Tasks** - Create and manage your to-do list
 - **Link Tasks to Timer** - Click a task to start a focused Pomodoro session
 - **Task Highlighting** - Visual indication of active task
@@ -21,6 +23,7 @@ A modern, feature-rich Progressive Web App (PWA) for the Pomodoro Technique with
 - **Persistent Storage** - All tasks saved locally using IndexedDB
 
 ### Progressive Web App
+
 - **Offline Support** - Works without internet connection
 - **Installable** - Add to home screen on mobile and desktop
 - **Service Worker** - Smart caching for optimal performance
@@ -30,23 +33,27 @@ A modern, feature-rich Progressive Web App (PWA) for the Pomodoro Technique with
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ and pnpm installed
 - Modern web browser with PWA support
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/pomodoro-timer.git
 cd pomodoro-timer
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Start the development server:
+
 ```bash
 pnpm dev
 ```
@@ -117,7 +124,9 @@ pomodoro-timer/
 ## 🎨 Features in Detail
 
 ### Timer Hook (`useTimer`)
+
 Custom React hook that manages:
+
 - Timer state (running, paused, completed)
 - Time remaining calculation
 - Progress percentage
@@ -126,14 +135,18 @@ Custom React hook that manages:
 - Browser title updates
 
 ### IndexedDB Storage
+
 Persistent local storage for:
+
 - All tasks with metadata
 - Timer state (time remaining, running status)
 - Active task ID
 - Auto-save on page unload
 
 ### Service Worker
+
 Implements:
+
 - Cache-first strategy for offline support
 - Dynamic caching for runtime assets
 - Cache versioning and cleanup
@@ -161,6 +174,23 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+### 🤖 GitHub Copilot Custom Agent
+
+This repository includes a custom GitHub Copilot agent (`@pomodoro-fullstack-expert`) that specializes in:
+
+- React 19, TypeScript, and PWA development
+- Code review and quality assurance
+- Bug hunting and performance optimization
+- IndexedDB and Service Worker best practices
+
+To use the agent in GitHub Copilot Chat:
+
+```
+@pomodoro-fullstack-expert [your question or request]
+```
+
+See [.github/agents/README.md](.github/agents/README.md) for more details.
 
 ## 🐛 Known Issues
 

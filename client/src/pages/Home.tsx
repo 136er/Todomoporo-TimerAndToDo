@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { TimerCanvas } from '@/components/TimerCanvas';
-import { TimerControls } from '@/components/TimerControls';
-import { TaskList } from '@/components/TaskList';
-import SessionSettings from '@/components/SessionSettings';
-import { useTimer } from '@/hooks/useTimer';
-import { Card } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { useEffect } from "react";
+import { TimerCanvas } from "@/components/TimerCanvas";
+import { TimerControls } from "@/components/TimerControls";
+import { TaskList } from "@/components/TaskList";
+import SessionSettings from "@/components/SessionSettings";
+import { useTimer } from "@/hooks/useTimer";
+import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 /**
  * Main Pomodoro Timer page
@@ -36,10 +36,10 @@ export default function Home() {
    * Request notification permission on mount
    */
   useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          toast.success('Notifications enabled');
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          toast.success("Notifications enabled");
         }
       });
     }
@@ -49,14 +49,14 @@ export default function Home() {
    * Register Service Worker
    */
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered:', registration);
+        .register("/sw.js")
+        .then(registration => {
+          console.log("Service Worker registered:", registration);
         })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
+        .catch(error => {
+          console.error("Service Worker registration failed:", error);
         });
     }
   }, []);
@@ -95,11 +95,11 @@ export default function Home() {
                   onReset={resetTimer}
                 />
                 <p className="text-sm text-muted-foreground">
-                  {mode === 'work'
-                    ? 'Click Start to begin a 25-minute focus session'
-                    : mode === 'shortBreak'
-                    ? 'Take a 5-minute break'
-                    : 'Enjoy your 15-minute long break'}
+                  {mode === "work"
+                    ? "Click Start to begin a 25-minute focus session"
+                    : mode === "shortBreak"
+                      ? "Take a 5-minute break"
+                      : "Enjoy your 15-minute long break"}
                 </p>
               </div>
             </Card>
@@ -118,7 +118,9 @@ export default function Home() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-lg">✓</span>
-                  <span>After 4 sessions, take a longer 15-30 minute break</span>
+                  <span>
+                    After 4 sessions, take a longer 15-30 minute break
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-lg">✓</span>
@@ -146,10 +148,10 @@ export default function Home() {
             {/* Task List */}
             <TaskList
               activeTaskId={activeTaskId}
-              onTaskSelect={(id) => {
+              onTaskSelect={id => {
                 setActiveTaskId(id);
                 if (id !== null) {
-                  toast.success('Task linked to timer');
+                  toast.success("Task linked to timer");
                 }
               }}
             />
