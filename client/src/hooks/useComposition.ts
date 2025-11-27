@@ -29,28 +29,28 @@ export function useComposition<
     onCompositionEnd: originalOnCompositionEnd,
   } = options;
 
-  const c = useRef(false);
-  const timer = useRef<TimerResponse | null>(null);
-  const timer2 = useRef<TimerResponse | null>(null);
+  const isComposingRef = useRef(false);
+  const compositionEndTimerRef = useRef<TimerResponse | null>(null);
+  const compositionResetTimerRef = useRef<TimerResponse | null>(null);
 
   const onCompositionStart = usePersistFn((e: React.CompositionEvent<T>) => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
+    if (compositionEndTimerRef.current) {
+      clearTimeout(compositionEndTimerRef.current);
+      compositionEndTimerRef.current = null;
     }
-    if (timer2.current) {
-      clearTimeout(timer2.current);
-      timer2.current = null;
+    if (compositionResetTimerRef.current) {
+      clearTimeout(compositionResetTimerRef.current);
+      compositionResetTimerRef.current = null;
     }
-    c.current = true;
+    isComposingRef.current = true;
     originalOnCompositionStart?.(e);
   });
 
   const onCompositionEnd = usePersistFn((e: React.CompositionEvent<T>) => {
     // 使用两层 setTimeout 来处理 Safari 浏览器中 compositionEnd 先于 onKeyDown 触发的问题
-    timer.current = setTimeout(() => {
-      timer2.current = setTimeout(() => {
-        c.current = false;
+    compositionEndTimerRef.current = setTimeout(() => {
+      compositionResetTimerRef.current = setTimeout(() => {
+        isComposingRef.current = false;
       });
     });
     originalOnCompositionEnd?.(e);
@@ -59,7 +59,7 @@ export function useComposition<
   const onKeyDown = usePersistFn((e: React.KeyboardEvent<T>) => {
     // 在 composition 状态下，阻止 ESC 和 Enter（非 shift+Enter）事件的冒泡
     if (
-      c.current &&
+      isComposingRef.current &&
       (e.key === "Escape" || (e.key === "Enter" && !e.shiftKey))
     ) {
       e.stopPropagation();
@@ -69,7 +69,7 @@ export function useComposition<
   });
 
   const isComposing = usePersistFn(() => {
-    return c.current;
+    return isComposingRef.current;
   });
 
   return {
